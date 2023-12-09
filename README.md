@@ -5,3 +5,4 @@
 3. นางสาวรุ่งตะวัน สุทโธ        รหัสนักศึกษา 643020489-0   Github : rungtawans
 ![media](/media/rungtawan_pic.jpg)
 4. นายคัจฉพัฒน ศรีนวล        รหัสนักศึกษา 643021219-4   Github : Khatchapohat
+![media](/media/khatchaphat_pic.jpg)
