@@ -55,18 +55,18 @@
           href="#checkout-guest-form"
           role="tab"
           aria-controls="checkout-guest-form"
-          {**{if !$show_login_form} aria-selected="true"{/if}>*}
+          {if !$show_login_form} aria-selected="true"{/if}>
           {l s='Do you want tax invoice?' d='Shop.Theme.Checkout'}
         </a>
       </li>
 
     </ul>
 
-    {**<div class="tab-content">
+    <div class="tab-content">
       <div class="tab-pane {if !$show_login_form}active{/if}" id="checkout-guest-form" role="tabpanel" {if $show_login_form}aria-hidden="true"{/if}>
         {render file='checkout/_partials/customer-form.tpl' ui=$register_form guest_allowed=$guest_allowed}
       </div>
-    </div>*}
+    </div>
 
 
   {/if}
