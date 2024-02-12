@@ -22,26 +22,25 @@
  * @copyright Since 2007 PrestaShop SA and Contributors
  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License 3.0 (AFL-3.0)
  *}
+
+//templates\customer\_partials\customer-form.tpl
+
+{**invoice form*} 
 {block name='customer_form'}
   {block name='customer_form_errors'}
     {include file='_partials/form-errors.tpl' errors=$errors['']}
   {/block}
 
-<form action="{block name='customer_form_actionurl'}{$action}{/block}" id="customer-form" class="js-customer-form" method="post">
+  <form action="{block name='customer_form_actionurl'}{$action}{/block}" id="customer-form" class="js-customer-form" method="post">
   <div>
     {block "form_fields"}
-      {foreach from=$formFields item="field"}
-        {block "form_field"}
-          {if $field.type === "password"}
-            <div class="field-password-policy">
-              {form_field field=$field}
-            </div>
-          {else}
-            {form_field field=$field}
-          {/if}
-        {/block}
-      {/foreach}
-      {$hook_create_account_form nofilter}
+
+        <input type="radio" id="tax_invoice_yes" name="tax_invoice" value="yes">
+        <label for="tax_invoice_yes">Yes</label>
+        <br>
+        <input type="radio" id="tax_invoice_no" name="tax_invoice" value="no">
+        <label for="tax_invoice_no">No</label>
+      
     {/block}
   </div>
 
