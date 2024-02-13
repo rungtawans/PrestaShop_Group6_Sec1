@@ -20,5 +20,8 @@
  <section id="ps_cashondelivery-paymentOptions-additionalInformation">
    <p>{l s='Promptpay : 0958445963' d='Modules.Cashondelivery.Shop'}</p><br>
    <p>{l s='Name : Prastashop Group6' d='Modules.Cashondelivery.Shop'}</p>
+   <div>
+    <img src="https://cdn.ttgtmedia.com/rms/misc/qr_code_barcode.jpg">
+ </div>
  </section>
  
