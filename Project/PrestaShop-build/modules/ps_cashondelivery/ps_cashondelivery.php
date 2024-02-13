@@ -86,7 +86,7 @@ class Ps_Cashondelivery extends PaymentModule
 
         $cashOnDeliveryOption = new PaymentOption();
         $cashOnDeliveryOption->setModuleName($this->name);
-        $cashOnDeliveryOption->setCallToActionText($this->trans('Pay by Cash on Delivery', [], 'Modules.Cashondelivery.Shop'));
+        $cashOnDeliveryOption->setCallToActionText($this->trans('Promptpay number', [], 'Modules.Cashondelivery.Shop'));
         $cashOnDeliveryOption->setAction($this->context->link->getModuleLink($this->name, 'validation', [], true));
         $cashOnDeliveryOption->setAdditionalInformation($this->fetch('module:ps_cashondelivery/views/templates/hook/paymentOptions-additionalInformation.tpl'));
 

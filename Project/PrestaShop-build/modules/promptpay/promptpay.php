@@ -299,9 +299,11 @@ class Promptpay extends PaymentModule
             return;
         }
         $option = new \PrestaShop\PrestaShop\Core\Payment\PaymentOption();
-        $option->setCallToActionText($this->l('Promptpay'))
+        $option->setCallToActionText($this->l('Promptpay QR'))
             ->setAction($this->context->link->getModuleLink($this->name, 'validation', array(), true));
-
+            //เพิ่มรูปภาพ QR
+        $option->setAdditionalInformation($this->fetch('module:promptpay/views/templates/hook/paymentQR.tpl'));
+        
         return [
             $option
         ];

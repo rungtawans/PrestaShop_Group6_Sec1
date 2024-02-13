@@ -157,7 +157,7 @@ class Ps_Checkpayment extends PaymentModule
 
         $newOption = new PaymentOption();
         $newOption->setModuleName($this->name)
-            ->setCallToActionText($this->trans('Pay by Check', [], 'Modules.Checkpayment.Admin'))
+            ->setCallToActionText($this->trans('Counter Service', [], 'Modules.Checkpayment.Admin'))
             ->setAction($this->context->link->getModuleLink($this->name, 'validation', [], true))
             ->setAdditionalInformation($this->fetch('module:ps_checkpayment/views/templates/front/payment_infos.tpl'));
 
