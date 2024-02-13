@@ -52,8 +52,8 @@ class Ps_Cashondelivery extends PaymentModule
 
         parent::__construct();
 
-        $this->displayName = $this->trans('Cash on delivery (COD)', [], 'Modules.Cashondelivery.Admin');
-        $this->description = $this->trans('Accept cash payments on delivery to make it easy for customers to purchase on your store.', [], 'Modules.Cashondelivery.Admin');
+        $this->displayName = $this->trans('Promptpay', [], 'Modules.Cashondelivery.Admin');
+        $this->description = $this->trans('Accept Promptpay to make it easy for customers to purchase on your store.', [], 'Modules.Cashondelivery.Admin');
     }
 
     /**

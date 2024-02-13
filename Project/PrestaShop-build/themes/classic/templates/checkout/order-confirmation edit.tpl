@@ -18,6 +18,7 @@
             {block name='hook_order_confirmation'}
               {* $HOOK_ORDER_CONFIRMATION nofilter *}
               
+              <h3 class="h3 card-title">{l s='Upload Slip' d='Shop.Theme.Checkout'}:</h3>
               <form action="index.php" method="post" enctype="multipart/form-data" id="uploadForm">
                 <input type="file" name="fileToUpload" id="fileToUpload">
                 <br><br>

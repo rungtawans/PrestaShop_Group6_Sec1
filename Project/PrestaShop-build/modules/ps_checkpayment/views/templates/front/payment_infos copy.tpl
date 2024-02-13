@@ -28,7 +28,7 @@
     <dl>
       <dt>{l s='Amount' d='Modules.Checkpayment.Shop'}</dt>
       <dd>{$checkTotal} {$checkTaxLabel}</dd>
-      <dt>{l s='Payee' d='Modules.Checkpayment.Shop'}</dt>
+      <dt>{l s='Pay by Counter Service' d='Modules.Checkpayment.Shop'}</dt>
       <dd>{$checkOrder}</dd>
       <dt>{l s='Send your check to this address' d='Modules.Checkpayment.Shop'}</dt>
       <dd>{$checkAddress nofilter}</dd>
