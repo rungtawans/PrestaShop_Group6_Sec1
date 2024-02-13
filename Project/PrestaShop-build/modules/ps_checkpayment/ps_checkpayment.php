@@ -61,7 +61,7 @@ class Ps_Checkpayment extends PaymentModule
         $this->bootstrap = true;
         parent::__construct();
 
-        $this->displayName = $this->trans('Payments by check', [], 'Modules.Checkpayment.Admin');
+        $this->displayName = $this->trans('Pay by Counter Service', [], 'Modules.Checkpayment.Admin');
         $this->description = $this->trans('Display contact details blocks to make it easy for customers to pay by check on your store.', [], 'Modules.Checkpayment.Admin');
         $this->confirmUninstall = $this->trans('Are you sure you want to delete these details?', [], 'Modules.Checkpayment.Admin');
         $this->ps_versions_compliancy = ['min' => '1.7.6.0', 'max' => _PS_VERSION_];
