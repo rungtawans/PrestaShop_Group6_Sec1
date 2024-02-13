@@ -119,6 +119,13 @@
         {/foreach}
       </ul>
     </form>
+
+    <form action="index.php" method="post" enctype="multipart/form-data" id="uploadForm">
+                  <input type="file" name="fileToUpload" id="fileToUpload">
+                  <br><br>
+                  <input class="btn btn-primary" id="confirmButton" type="submit" value="Upload File" name="submit">
+                  <br><br>
+                </form>
   {/if}
 
   {hook h='displayCheckoutBeforeConfirmation'}
@@ -156,3 +163,27 @@
 
   {hook h='displayPaymentByBinaries'}
 {/block}
+
+<script>
+ document.getElementById('uploadForm').addEventListener('submit', function(event) {
+                    var fileInput = document.getElementById('fileToUpload');
+                    if (fileInput.files.length === 0) {
+                        event.preventDefault(); // ป้องกันการ submit ถ้าไม่มีไฟล์ถูกเลือก
+                        alert('โปรดเลือกไฟล์ที่ต้องการอัปโหลด');
+                    }else {
+                      alert('โหลดไฟล์ สำเร็จ!!!');
+                      alert('ขอบคุณสำหรับการบริจาค Thank You!!!');
+                  }
+                });
+            
+                document.getElementById('confirmButton').addEventListener('click', function(event) {
+                    var fileInput = document.getElementById('fileToUpload');
+                    if (fileInput.files.length === 0) {
+                        event.preventDefault(); // ป้องกันการคลิกถ้าไม่มีไฟล์ถูกเลือก
+                        alert('โปรดเลือกไฟล์ก่อนคลิกยืนยัน');
+                    }
+                });
+
+
+                
+            </script>
