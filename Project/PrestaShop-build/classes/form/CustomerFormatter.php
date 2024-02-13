@@ -30,11 +30,11 @@ class CustomerFormatterCore implements FormFormatterInterface
     private $translator;
     private $language;
 
-    private $ask_for_birthdate = true;
-    private $ask_for_partner_optin = true;
-    private $partner_optin_is_required = true;
+    private $ask_for_birthdate = false;
+    private $ask_for_partner_optin = false;
+    private $partner_optin_is_required = false;
     private $ask_for_password = true;
-    private $password_is_required = true;
+    private $password_is_required = false;
     private $ask_for_new_password = false;
 
     public function __construct(
@@ -90,6 +90,19 @@ class CustomerFormatterCore implements FormFormatterInterface
     public function getFormat()
     {
         $format = [];
+
+        // $format['tax_invoice'] = (new FormField())
+        //     ->setName('tax_invoice')
+        //     ->setLabel(
+        //         $this->translator->trans(
+        //             'Tax Invoice',
+        //             [],
+        //             'Shop.Forms.Labels'
+        //         )
+        //     )
+        //     ->setType('radio-buttons')
+        //     ->setRequired(true)
+        //     ->setAvailableValues(['yes' => 'yes', 'no' => 'no']);
 
         $genders = Gender::getGenders($this->language->id);
         if ($genders->count() > 0) {

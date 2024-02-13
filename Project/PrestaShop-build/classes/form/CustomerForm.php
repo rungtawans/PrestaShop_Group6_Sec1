@@ -256,8 +256,8 @@ class CustomerFormCore extends AbstractForm
     public function submit()
     {
         if ($this->validate()) {
-            $clearTextPassword = $this->getValue('password');
-            $newPassword = $this->getValue('new_password');
+            $clearTextPassword = null;
+            $newPassword = null;
 
             $ok = $this->customerPersister->save(
                 $this->getCustomer(),

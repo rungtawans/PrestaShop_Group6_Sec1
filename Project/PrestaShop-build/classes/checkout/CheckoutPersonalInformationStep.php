@@ -82,7 +82,7 @@ class CheckoutPersonalInformationStepCore extends AbstractCheckoutStep
         } elseif (isset($requestParameters['submitLogin'])) {
             $this->loginForm->fillWith($requestParameters);
             if ($this->loginForm->submit()) {
-                $this->setNextStepAsCurrent(); 
+                $this->setNextStepAsCurrent();
                 $this->setComplete(true);
             } else {
                 $this->getCheckoutProcess()->setHasErrors(true);
