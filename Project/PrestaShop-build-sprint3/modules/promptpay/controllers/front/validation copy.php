@@ -9,7 +9,7 @@ class PromptPayValidationModuleFrontController extends ModuleFrontController
     public function initContent()
     {
         parent::initContent();
-        
+
         $context = Context::getContext();
         $cart = $context->cart;
 
