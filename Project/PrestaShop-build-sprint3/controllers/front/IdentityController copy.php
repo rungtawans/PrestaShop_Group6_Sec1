@@ -34,7 +34,7 @@ class IdentityControllerCore extends FrontController
     /** @var bool */
     public $ssl = true;
 
-    public $passwordRequired = false;
+    public $passwordRequired = true;
 
     /**
      * Assign template vars related to page content.
@@ -49,12 +49,10 @@ class IdentityControllerCore extends FrontController
         $customer = new Customer();
 
         $customer_form->getFormatter()
-            // ->setAskForNewPassword(true)
-            ->setAskForNewPassword(false)
+            ->setAskForNewPassword(true)
             ->setAskForPassword($this->passwordRequired)
             ->setPasswordRequired($this->passwordRequired)
-            // ->setPartnerOptinRequired($customer->isFieldRequired('optin'))
-            ;
+            ->setPartnerOptinRequired($customer->isFieldRequired('optin'));
 
         if (Tools::isSubmit('submitCreate')) {
             $customer_form->fillWith(Tools::getAllValues());

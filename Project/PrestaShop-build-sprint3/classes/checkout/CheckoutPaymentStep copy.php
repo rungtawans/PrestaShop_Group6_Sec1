@@ -82,7 +82,7 @@ class CheckoutPaymentStepCore extends AbstractCheckoutStep
     {
         $isFree = 0 == (float) $this->getCheckoutSession()->getCart()->getOrderTotal(true, Cart::BOTH);
         $paymentOptions = $this->paymentOptionsFinder->present($isFree);
-        // $conditionsToApprove = $this->conditionsToApproveFinder->getConditionsToApproveForTemplate();
+        $conditionsToApprove = $this->conditionsToApproveFinder->getConditionsToApproveForTemplate();
         $deliveryOptions = $this->getCheckoutSession()->getDeliveryOptions();
         $deliveryOptionKey = $this->getCheckoutSession()->getSelectedDeliveryOption();
 
@@ -99,7 +99,7 @@ class CheckoutPaymentStepCore extends AbstractCheckoutStep
         $assignedVars = [
             'is_free' => $isFree,
             'payment_options' => $paymentOptions,
-            // 'conditions_to_approve' => $conditionsToApprove,
+            'conditions_to_approve' => $conditionsToApprove,
             'selected_payment_option' => $this->selected_payment_option,
             'selected_delivery_option' => $selectedDeliveryOption,
             'show_final_summary' => Configuration::get('PS_FINAL_SUMMARY_ENABLED'),

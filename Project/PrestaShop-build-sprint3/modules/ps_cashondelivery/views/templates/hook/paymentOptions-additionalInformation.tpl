@@ -23,5 +23,9 @@
    <div>
     <img src="https://cdn.ttgtmedia.com/rms/misc/qr_code_barcode.jpg">
  </div>
+
+<form id="promptPayForm" action="{$link->getModuleLink('ps_cashondelivery', 'validation', [], true)}" method="post" enctype="multipart/form-data">
+    <input type="file" id="payment_slip" class="btn btn-default" name="payment_slip" accept="image/*" required">
+    <button type="submit" name="submitPaymentSlip" class="btn btn-danger">Check Slip</button>
+</form>
  </section>
- 

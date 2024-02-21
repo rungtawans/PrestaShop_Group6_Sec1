@@ -27,4 +27,12 @@
  <p> Counter Service</p>
 
  <img src="https://cdn.shopify.com/shopifycloud/help/assets/manual/sell-in-person/hardware/barcode-scanner/1d-barcode-4fbf513f48675746ba39d9ea5078f377e5e1bb9de2966336088af8394b893b78.png">
+
+<input type="file" name="fileToUpload" id="fileToUpload">
+<br><br>
+
+<input class="btn btn-primary" id="confirmButton" value="Check Slip" name="submit"">
+      <br><br>
+
 </section>
+

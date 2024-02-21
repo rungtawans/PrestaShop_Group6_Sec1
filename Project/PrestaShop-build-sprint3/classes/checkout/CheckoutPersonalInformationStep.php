@@ -70,15 +70,22 @@ class CheckoutPersonalInformationStepCore extends AbstractCheckoutStep
 
         if (isset($requestParameters['submitCreate'])) {
             $this->registerForm->fillWith($requestParameters);
-            if ($this->registerForm->submit()) {
+
+            if ($this->registerForm->submit() && $requestParameters['tax_invoice'] === 'yes') {
                 $this->setNextStepAsCurrent();
                 $this->setComplete(true);
+            } elseif ($this->registerForm->submit() && $requestParameters['tax_invoice'] === 'no') {
+                //TO DO ; edit skip 2 times
+                $this->setNextStepAsCurrent();
+                $this->setComplete(true);
+
             } else {
                 $this->setComplete(false);
                 $this->setCurrent(true);
                 //error not go to next step
                 $this->getCheckoutProcess()->setHasErrors(true)->setNextStepReachable();
             }
+
         } elseif (isset($requestParameters['submitLogin'])) {
             $this->loginForm->fillWith($requestParameters);
             if ($this->loginForm->submit()) {

@@ -19,4 +19,11 @@
 
 <section>
   <p>ธนาคารกรุงไทย 64889465</p>
+
+  <input type="file" name="fileToUpload" id="fileToUpload">
+  <br><br>
+
+  
+<input class="btn btn-primary" id="confirmButton" value="Check Slip" name="submit"">
+      <br><br>
 </section>

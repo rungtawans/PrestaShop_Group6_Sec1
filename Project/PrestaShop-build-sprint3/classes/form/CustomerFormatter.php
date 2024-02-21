@@ -91,18 +91,18 @@ class CustomerFormatterCore implements FormFormatterInterface
     {
         $format = [];
 
-        // $format['tax_invoice'] = (new FormField())
-        //     ->setName('tax_invoice')
-        //     ->setLabel(
-        //         $this->translator->trans(
-        //             'Tax Invoice',
-        //             [],
-        //             'Shop.Forms.Labels'
-        //         )
-        //     )
-        //     ->setType('radio-buttons')
-        //     ->setRequired(true)
-        //     ->setAvailableValues(['yes' => 'yes', 'no' => 'no']);
+        $format['tax_invoice'] = (new FormField())
+            ->setName('tax_invoice')
+            ->setLabel(
+                $this->translator->trans(
+                    'Tax Invoice',
+                    [],
+                    'Shop.Forms.Labels'
+                )
+            )
+            ->setType('radio-buttons')
+            ->setRequired(true)
+            ->setAvailableValues(['yes' => 'yes', 'no' => 'no']);
 
         $genders = Gender::getGenders($this->language->id);
         if ($genders->count() > 0) {
@@ -184,81 +184,81 @@ class CustomerFormatterCore implements FormFormatterInterface
             )
             ->setRequired(true);
 
-        if ($this->ask_for_password) {
-            $format['password'] = (new FormField())
-                ->setName('password')
-                ->setType('password')
-                ->setLabel(
-                    $this->translator->trans(
-                        'Password',
-                        [],
-                        'Shop.Forms.Labels'
-                    )
-                )
-                ->setRequired($this->password_is_required);
-        }
+        // if ($this->ask_for_password) {
+        //     $format['password'] = (new FormField())
+        //         ->setName('password')
+        //         ->setType('password')
+        //         ->setLabel(
+        //             $this->translator->trans(
+        //                 'Password',
+        //                 [],
+        //                 'Shop.Forms.Labels'
+        //             )
+        //         )
+        //         ->setRequired($this->password_is_required);
+        // }
 
-        if ($this->ask_for_new_password) {
-            $format['new_password'] = (new FormField())
-                ->setName('new_password')
-                ->setType('password')
-                ->setLabel(
-                    $this->translator->trans(
-                        'New password',
-                        [],
-                        'Shop.Forms.Labels'
-                    )
-                );
-        }
+        // if ($this->ask_for_new_password) {
+        //     $format['new_password'] = (new FormField())
+        //         ->setName('new_password')
+        //         ->setType('password')
+        //         ->setLabel(
+        //             $this->translator->trans(
+        //                 'New password',
+        //                 [],
+        //                 'Shop.Forms.Labels'
+        //             )
+        //         );
+        // }
 
-        if ($this->ask_for_birthdate) {
-            $format['birthday'] = (new FormField())
-                ->setName('birthday')
-                ->setType('text')
-                ->setLabel(
-                    $this->translator->trans(
-                        'Birthdate',
-                        [],
-                        'Shop.Forms.Labels'
-                    )
-                )
-                ->addAvailableValue('placeholder', Tools::getDateFormat())
-                ->addAvailableValue(
-                    'comment',
-                    $this->translator->trans('(E.g.: %date_format%)', ['%date_format%' => Tools::formatDateStr('31 May 1970')], 'Shop.Forms.Help')
-                );
-        }
+        // if ($this->ask_for_birthdate) {
+        //     $format['birthday'] = (new FormField())
+        //         ->setName('birthday')
+        //         ->setType('text')
+        //         ->setLabel(
+        //             $this->translator->trans(
+        //                 'Birthdate',
+        //                 [],
+        //                 'Shop.Forms.Labels'
+        //             )
+        //         )
+        //         ->addAvailableValue('placeholder', Tools::getDateFormat())
+        //         ->addAvailableValue(
+        //             'comment',
+        //             $this->translator->trans('(E.g.: %date_format%)', ['%date_format%' => Tools::formatDateStr('31 May 1970')], 'Shop.Forms.Help')
+        //         );
+        // }
 
-        if ($this->ask_for_partner_optin) {
-            $format['optin'] = (new FormField())
-                ->setName('optin')
-                ->setType('checkbox')
-                ->setLabel(
-                    $this->translator->trans(
-                        'Receive offers from our partners',
-                        [],
-                        'Shop.Theme.Customeraccount'
-                    )
-                )
-                ->setRequired($this->partner_optin_is_required);
-        }
+        // if ($this->ask_for_partner_optin) {
+        //     $format['optin'] = (new FormField())
+        //         ->setName('optin')
+        //         ->setType('checkbox')
+        //         ->setLabel(
+        //             $this->translator->trans(
+        //                 'Receive offers from our partners',
+        //                 [],
+        //                 'Shop.Theme.Customeraccount'
+        //             )
+        //         )
+        //         ->setRequired($this->partner_optin_is_required);
+        // }
 
         // ToDo, replace the hook exec with HookFinder when the associated PR will be merged
         // An array [module_name => module_output] will be returned
-        $additionalCustomerFormFields = Hook::exec('additionalCustomerFormFields', ['fields' => &$format], null, true);
+        // $additionalCustomerFormFields = Hook::exec('additionalCustomerFormFields', ['fields' => &$format], null, true);
 
-        if (is_array($additionalCustomerFormFields)) {
-            foreach ($additionalCustomerFormFields as $moduleName => $additionnalFormFields) {
-                if (!is_array($additionnalFormFields)) {
-                    continue;
-                }
+        // if (is_array($additionalCustomerFormFields)) {
+        //     foreach ($additionalCustomerFormFields as $moduleName => $additionnalFormFields) {
+        //         if (!is_array($additionnalFormFields)) {
+        //             continue;
+        //         }
 
-                foreach ($additionnalFormFields as $formField) {
-                    $formField->moduleName = $moduleName;
-                    $format[$moduleName . '_' . $formField->getName()] = $formField;
-                }
-            }
-        }
+        //         foreach ($additionnalFormFields as $formField) {
+        //             $formField->moduleName = $moduleName;
+        //             $format[$moduleName . '_' . $formField->getName()] = $formField;
+        //         }
+        //     }
+        // }
 
         // TODO: TVA etc.?
 

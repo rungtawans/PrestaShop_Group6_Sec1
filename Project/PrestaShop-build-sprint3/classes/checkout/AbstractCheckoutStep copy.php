@@ -205,21 +205,5 @@ abstract class AbstractCheckoutStepCore implements CheckoutStepInterface
         }
     }
 
-    public function setSkipTwoTimes()
-    {
-        $steps = $this->getCheckoutProcess()->getSteps();
 
-        for ($i = 0; $i < count($steps); $i++) {
-            $step = $steps[$i];
-
-            if ($i == 4) {
-                $step->step_is_current = true;
-                break;
-            }else{
-                continue;
-            }
-        
-        
-    }
-}
 }

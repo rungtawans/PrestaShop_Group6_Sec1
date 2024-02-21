@@ -45,7 +45,8 @@ class CustomerFormCore extends AbstractForm
 
     private $customerPersister;
     private $guest_allowed;
-    private $passwordRequired = true;
+    // private $passwordRequired = true;
+    private $passwordRequired = false;
 
     private $IDNConverter;
 
@@ -147,58 +148,58 @@ class CustomerFormCore extends AbstractForm
             $birthdayField->setValue($dateBuilt->format('Y-m-d'));
         }
 
-        if ($this->getField('new_password') === null
-            || !empty($this->getField('new_password')->getValue())
-        ) {
-            $passwordField = $this->getField('new_password') ?? $this->getField('password');
-            if (!empty($passwordField->getValue()) || $this->passwordRequired) {
-                if (Validate::isAcceptablePasswordLength($passwordField->getValue()) === false) {
-                    $passwordField->addError($this->translator->trans(
-                        'Password must be between %d and %d characters long',
-                        [
-                            Configuration::get(PasswordPolicyConfiguration::CONFIGURATION_MINIMUM_LENGTH),
-                            Configuration::get(PasswordPolicyConfiguration::CONFIGURATION_MAXIMUM_LENGTH),
-                        ],
-                        'Shop.Notifications.Error'
-                    ));
-                }
+        // if ($this->getField('new_password') === null
+        //     || !empty($this->getField('new_password')->getValue())
+        // ) {
+        //     $passwordField = $this->getField('new_password') ?? $this->getField('password');
+        //     if (!empty($passwordField->getValue()) || $this->passwordRequired) {
+        //         if (Validate::isAcceptablePasswordLength($passwordField->getValue()) === false) {
+        //             $passwordField->addError($this->translator->trans(
+        //                 'Password must be between %d and %d characters long',
+        //                 [
+        //                     Configuration::get(PasswordPolicyConfiguration::CONFIGURATION_MINIMUM_LENGTH),
+        //                     Configuration::get(PasswordPolicyConfiguration::CONFIGURATION_MAXIMUM_LENGTH),
+        //                 ],
+        //                 'Shop.Notifications.Error'
+        //             ));
+        //         }
 
-                if (Validate::isAcceptablePasswordScore($passwordField->getValue()) === false) {
-                    $wordingsForScore = [
-                        $this->translator->trans('Very weak', [], 'Shop.Theme.Global'),
-                        $this->translator->trans('Weak', [], 'Shop.Theme.Global'),
-                        $this->translator->trans('Average', [], 'Shop.Theme.Global'),
-                        $this->translator->trans('Strong', [], 'Shop.Theme.Global'),
-                        $this->translator->trans('Very strong', [], 'Shop.Theme.Global'),
-                    ];
-                    $globalErrorMessage = $this->translator->trans(
-                        'The minimum score must be: %s',
-                        [
-                            $wordingsForScore[(int) Configuration::get(PasswordPolicyConfiguration::CONFIGURATION_MINIMUM_SCORE)],
-                        ],
-                        'Shop.Notifications.Error'
-                    );
-                    if ($this->context->shop->theme->get('global_settings.new_password_policy_feature') !== true) {
-                        $zxcvbn = new Zxcvbn();
-                        $result = $zxcvbn->passwordStrength($passwordField->getValue());
-                        if (!empty($result['feedback']['warning'])) {
-                            $passwordField->addError($this->translator->trans(
-                                $result['feedback']['warning'], [], 'Shop.Theme.Global'
-                            ));
-                        } else {
-                            $passwordField->addError($globalErrorMessage);
-                        }
-                        foreach ($result['feedback']['suggestions'] as $suggestion) {
-                            $passwordField->addError($this->translator->trans($suggestion, [], 'Shop.Theme.Global'));
-                        }
-                    } else {
-                        $passwordField->addError($globalErrorMessage);
-                    }
-                }
-            }
-        }
-        $this->validateFieldsLengths();
-        $this->validateByModules();
+        //         if (Validate::isAcceptablePasswordScore($passwordField->getValue()) === false) {
+        //             $wordingsForScore = [
+        //                 $this->translator->trans('Very weak', [], 'Shop.Theme.Global'),
+        //                 $this->translator->trans('Weak', [], 'Shop.Theme.Global'),
+        //                 $this->translator->trans('Average', [], 'Shop.Theme.Global'),
+        //                 $this->translator->trans('Strong', [], 'Shop.Theme.Global'),
+        //                 $this->translator->trans('Very strong', [], 'Shop.Theme.Global'),
+        //             ];
+        //             $globalErrorMessage = $this->translator->trans(
+        //                 'The minimum score must be: %s',
+        //                 [
+        //                     $wordingsForScore[(int) Configuration::get(PasswordPolicyConfiguration::CONFIGURATION_MINIMUM_SCORE)],
+        //                 ],
+        //                 'Shop.Notifications.Error'
+        //             );
+        //             if ($this->context->shop->theme->get('global_settings.new_password_policy_feature') !== true) {
+        //                 $zxcvbn = new Zxcvbn();
+        //                 $result = $zxcvbn->passwordStrength($passwordField->getValue());
+        //                 if (!empty($result['feedback']['warning'])) {
+        //                     $passwordField->addError($this->translator->trans(
+        //                         $result['feedback']['warning'], [], 'Shop.Theme.Global'
+        //                     ));
+        //                 } else {
+        //                     $passwordField->addError($globalErrorMessage);
+        //                 }
+        //                 foreach ($result['feedback']['suggestions'] as $suggestion) {
+        //                     $passwordField->addError($this->translator->trans($suggestion, [], 'Shop.Theme.Global'));
+        //                 }
+        //             } else {
+        //                 $passwordField->addError($globalErrorMessage);
+        //             }
+        //         }
+        //     }
+        // }
+        // $this->validateFieldsLengths();
+        // $this->validateByModules();
 
         return parent::validate();
     }
