@@ -7,6 +7,12 @@
         </ul>
     </div>
 {/if}
+
+{if isset($decodedText)}
+    <p>Decoded text from QR code: {$decodedText}</p>
+
+{/if}
+
 <p>ชื่อ: วิทยาลัยการคอมพิวเตอร์</p>
 <p>หมายเลขพร้อมเพย์: 0987654321 </p>
 <p>หรือสแกนข้างล่างนี้</p>
