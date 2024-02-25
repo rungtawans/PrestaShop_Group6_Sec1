@@ -19,16 +19,16 @@ class PromptPayValidationModuleFrontController extends ModuleFrontController
 
             if (isset($_FILES['payment_slip']) && !empty($_FILES['payment_slip']['name'])) {
                 //     // Validate the uploaded file (e.g., file type, size, etc.)
-                // $validFile = $this->validateFile($_FILES['payment_slip']);
+                $validFile = $this->validateFile($_FILES['payment_slip']);
 
-                $decodedText = $this->validateFile($_FILES['payment_slip']);
-                if ($decodedText) {
-                    // Output the decoded text in the HTML
-                    $this->context->smarty->assign('decodedText', $decodedText);
-                } else {
-                    // Handle the case where no file is uploaded or no QR code is found
-                    $this->context->smarty->assign('errorMessage', $this->module->l('No QR code found in the uploaded file.'));
-                }
+                // $decodedText = $this->validateFile($_FILES['payment_slip']);
+                // if ($decodedText) {
+                //     // Output the decoded text in the HTML
+                //     $this->context->smarty->assign('decodedText', $decodedText);
+                // } else {
+                //     // Handle the case where no file is uploaded or no QR code is found
+                //     $this->context->smarty->assign('errorMessage', $this->module->l('No QR code found in the uploaded file.'));
+                // }
 
                 if ($validFile) {
                     Tools::redirect('index.php');
@@ -69,8 +69,9 @@ class PromptPayValidationModuleFrontController extends ModuleFrontController
         $qrcode = new QrReader($file['tmp_name']);
         $qrcode->decode();
         $result = $qrcode->getResult();
-        $text = $qrcode->text();
-        return $text;
-        // return $result;
+        // $text = $qrcode->text();
+        // echo $text;
+        // return $text;
+        return $result;
     }
 }
