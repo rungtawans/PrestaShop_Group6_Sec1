@@ -6,3 +6,4 @@
         {l s='ชำระด้วยพร้อมเพย์สำเร็จ' d='Modules.PromptPay'}
     </div>
 {/block}
+

@@ -104,23 +104,23 @@ class CustomerFormatterCore implements FormFormatterInterface
             ->setRequired(true)
             ->setAvailableValues(['yes' => 'yes', 'no' => 'no']);
 
-        $genders = Gender::getGenders($this->language->id);
-        if ($genders->count() > 0) {
-            $genderField = (new FormField())
-                ->setName('id_gender')
-                ->setType('radio-buttons')
-                ->setLabel(
-                    $this->translator->trans(
-                        'Social title',
-                        [],
-                        'Shop.Forms.Labels'
-                    )
-                );
-            foreach ($genders as $gender) {
-                $genderField->addAvailableValue($gender->id, $gender->name);
-            }
-            $format[$genderField->getName()] = $genderField;
-        }
+        // $genders = Gender::getGenders($this->language->id);
+        // if ($genders->count() > 0) {
+        //     $genderField = (new FormField())
+        //         ->setName('id_gender')
+        //         ->setType('radio-buttons')
+        //         ->setLabel(
+        //             $this->translator->trans(
+        //                 'Social title',
+        //                 [],
+        //                 'Shop.Forms.Labels'
+        //             )
+        //         );
+        //     foreach ($genders as $gender) {
+        //         $genderField->addAvailableValue($gender->id, $gender->name);
+        //     }
+        //     $format[$genderField->getName()] = $genderField;
+        // }
 
         $format['firstname'] = (new FormField())
             ->setName('firstname')
@@ -135,7 +135,8 @@ class CustomerFormatterCore implements FormFormatterInterface
             ->addAvailableValue(
                 'comment',
                 $this->translator->trans('Only letters and the dot (.) character, followed by a space, are allowed.', [], 'Shop.Forms.Help')
-            );
+            )
+            ;
 
         $format['lastname'] = (new FormField())
             ->setName('lastname')
@@ -150,7 +151,8 @@ class CustomerFormatterCore implements FormFormatterInterface
             ->addAvailableValue(
                 'comment',
                 $this->translator->trans('Only letters and the dot (.) character, followed by a space, are allowed.', [], 'Shop.Forms.Help')
-            );
+            )
+            ;
 
         if (Configuration::get('PS_B2B_ENABLE')) {
             $format['company'] = (new FormField())
@@ -181,8 +183,8 @@ class CustomerFormatterCore implements FormFormatterInterface
                     [],
                     'Shop.Forms.Labels'
                 )
-            )
-            ->setRequired(true);
+            )->setRequired(true)
+            ;
 
         // if ($this->ask_for_password) {
         //     $format['password'] = (new FormField())

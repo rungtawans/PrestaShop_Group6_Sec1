@@ -1,17 +1,4 @@
-{if isset($errors) && $errors}
-    <div class="alert alert-danger">
-        <ul>
-            {foreach from=$errors item=error}
-                <li>{$error}</li>
-            {/foreach}
-        </ul>
-    </div>
-{/if}
 
-{if isset($decodedText)}
-    <p>Decoded text from QR code: {$decodedText}</p>
-
-{/if}
 
 <p>ชื่อ: วิทยาลัยการคอมพิวเตอร์</p>
 <p>หมายเลขพร้อมเพย์: 0987654321 </p>
@@ -22,5 +9,15 @@
 <p>เมื่อทำรายการเรียบร้อย กรุณาแนบสลิปข้างล่างนี้</p>
 <form id="promptPayForm" action="{$link->getModuleLink('promptpay', 'validation', [], true)}" method="post" enctype="multipart/form-data">
     <input type="file" id="payment_slip" class="btn btn-default" name="payment_slip" accept="image/*" required">
-    <button type="submit" name="submitPaymentSlip" class="btn btn-danger">ตรวจสอบ</button>
+    <button type="submit" name="submitPaymentSlip" class="btn btn-primary">ตรวจสอบ</button>
 </form>
+
+<script>
+
+// function alert()
+
+// {
+// alert("I am an alert box!");
+// }
+
+// </script>
