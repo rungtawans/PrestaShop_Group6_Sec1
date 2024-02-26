@@ -22,32 +22,31 @@
  * @copyright Since 2007 PrestaShop SA and Contributors
  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License 3.0 (AFL-3.0)
  *}
-{extends file=$layout}
+{block name='cart_detailed_actions'}
+  <div class="checkout cart-detailed-actions js-cart-detailed-actions card-block">
 
-{block name='header'}
-  {include file='checkout/_partials/header.tpl'}
-{/block}
+    {if $cart.minimalPurchaseRequired}
 
-{block name='content'}
-  <section id="content">
-    <div class="row">
+      <div class="alert alert-warning" role="alert">
+        {$cart.minimalPurchaseRequired}
+      </div>
+      <div class="text-sm-center">
+        <button type="button" class="btn btn-primary disabled" disabled>{l s='Proceed to checkout' d='Shop.Theme.Actions'}</button>
+      </div>
 
-      <div class="cart-grid-body col-xs-12 col-lg-8">
-        {block name='checkout_process'}
-          {render file='checkout/checkout-process.tpl' ui=$checkout_process}
-        {/block}
+    {elseif empty($cart.products) }
+
+      <div class="text-sm-center">
+        <button type="button" class="btn btn-primary disabled" disabled>{l s='Proceed to checkout' d='Shop.Theme.Actions'}</button>
+      </div>
+
+    {else}
+
+      <div class="text-sm-center">
+        <a href="{$urls.pages.order}" class="btn btn-primary">{l s='Proceed to checkout' d='Shop.Theme.Actions'}</a>
+        {hook h='displayExpressCheckout'}
       </div>
       
-      <div class="cart-grid-right col-xs-12 col-lg-4">
-        {block name='cart_summary'}
-          {include file='checkout/_partials/cart-summary.tpl' cart=$cart}
-        {/block}
-        {hook h='displayReassurance'}
-      </div>
-    </div>
-  </section>
-{/block}
-
-{block name='footer'}
-  {include file='checkout/_partials/footer.tpl'}
+    {/if}
+  </div>
 {/block}
