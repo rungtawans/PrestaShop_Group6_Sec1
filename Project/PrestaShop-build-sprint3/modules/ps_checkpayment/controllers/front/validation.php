@@ -24,67 +24,83 @@
  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License 3.0 (AFL-3.0)
  */
 
+require_once 'vendor/autoload.php';
+
+use Zxing\QrReader;
+
 /**
  * @since 1.5.0
  */
 class Ps_CheckpaymentValidationModuleFrontController extends ModuleFrontController
 {
-    public function postProcess()
+    public function initContent()
     {
-        if (!($this->module instanceof Ps_Checkpayment)) {
-            Tools::redirect('index.php?controller=order&step=1');
+        parent::initContent();
 
-            return;
-        }
+        $context = Context::getContext();
+        $cart = $context->cart;
 
-        $cart = $this->context->cart;
+        if (Tools::isSubmit('submitPaymentSlip')) {
 
-        if ($cart->id_customer == 0 || $cart->id_address_delivery == 0 || $cart->id_address_invoice == 0 || !$this->module->active) {
-            Tools::redirect('index.php?controller=order&step=1');
+            if (isset($_FILES['payment_slip']) && !empty($_FILES['payment_slip']['name'])) {
+                // Validate the uploaded file (e.g., file type, size, etc.)
+                $validFile = $this->validateFile($_FILES['payment_slip']);
 
-            return;
-        }
+                if ($validFile) {
 
-        // Check that this payment option is still available in case the customer changed his address just before the end of the checkout process
-        $authorized = false;
-        foreach (Module::getPaymentModules() as $module) {
-            if ($module['name'] == 'ps_checkpayment') {
-                $authorized = true;
-                break;
+                    //   Process the payment details and update order status
+                    $this->module->validateOrder(
+                        $cart->id,
+                        Configuration::get('PS_OS_PAYMENT'),
+                        $cart->getOrderTotal(),
+                        $this->module->displayName,
+                        null,
+                        array(),
+                        null,
+                        false,
+                        $cart->secure_key
+                    );
+
+                    $customer = new Customer($cart->id_customer);
+                    if (!Validate::isLoadedObject($customer)) {
+                        Tools::redirect('index.php?controller=order&step=1');
+                    }
+
+                    $this->success[] = $this->l('Slip is Validated');
+                    Tools::redirect('index.php?controller=order-confirmation&id_cart='
+                        . $cart->id . '&id_module=' . $this->module->id . '&id_order='
+                        . $this->module->currentOrder . '&key=' . $customer->secure_key);
+
+                    return;
+
+                } else {
+
+                    $this->errors[] = $this->l('Please upload a valid slip.');
+                    $this->redirectWithNotifications($this->getCurrentURL());
+                   
+                }
+            } else {
+                $this->errors[] = $this->l('Please upload a slip.');
+                $this->redirectWithNotifications($this->getCurrentURL());
+        
             }
         }
 
-        if (!$authorized) {
-            exit($this->trans('This payment method is not available.', [], 'Modules.Checkpayment.Shop'));
+        $this->setTemplate('module:ps_checkpayment/views/templates/front/notifications.tpl');        
+        Tools::redirect('index.php?controller=order&step=1');
+    }
+
+
+    public function validateFile($file)
+    {
+        // return true;
+        if (!isset($file['tmp_name']) || empty($file['tmp_name'])) {
+            return false; // No file uploaded
         }
+        $qrcode = new QrReader($file['tmp_name']);
+        $qrcode->decode();
+        $result = $qrcode->getResult();
 
-        $customer = new Customer($cart->id_customer);
-
-        if (!Validate::isLoadedObject($customer)) {
-            Tools::redirect('index.php?controller=order&step=1');
-
-            return;
-        }
-
-        $currency = $this->context->currency;
-        $total = (float) $cart->getOrderTotal(true, Cart::BOTH);
-
-        $mailVars = [
-            '{check_name}' => Configuration::get('CHEQUE_NAME'),
-            '{check_address}' => Configuration::get('CHEQUE_ADDRESS'),
-            '{check_address_html}' => str_replace("\n", '<br />', Configuration::get('CHEQUE_ADDRESS')), ];
-
-        $this->module->validateOrder(
-            (int) $cart->id,
-            (int) Configuration::get('PS_OS_CHEQUE'),
-            $total,
-            $this->module->displayName,
-            null,
-            $mailVars,
-            (int) $currency->id,
-            false,
-            $customer->secure_key
-        );
-        Tools::redirect('index.php?controller=order-confirmation&id_cart=' . (int) $cart->id . '&id_module=' . (int) $this->module->id . '&id_order=' . $this->module->currentOrder . '&key=' . $customer->secure_key);
+        return $result;
     }
 }

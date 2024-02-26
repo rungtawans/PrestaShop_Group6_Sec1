@@ -23,33 +23,9 @@
  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License 3.0 (AFL-3.0)
  *}
 
-<p>{l s='Your order on %s is complete.' sprintf=[$shop_name] d='Modules.Checkpayment.Shop'}</p>
-<p>{l s='Your check must include:' d='Modules.Checkpayment.Shop'}</p>
 
-<ul>
-	<li>
-		{l s='Payment amount.' d='Modules.Checkpayment.Shop'}
-		<span class="price"><strong>{$total_to_pay}</strong></span>
-	</li>
-
-	<li>
-		{l s='Payable to the order of' d='Modules.Checkpayment.Shop'}
-		<strong>{if $checkName}{$checkName}{else}___________{/if}</strong>
-	</li>
-
-	<li>
-		{l s='Mail to' d='Modules.Checkpayment.Shop'}
-		<strong>{if $checkAddress}{$checkAddress nofilter}{else}___________{/if}</strong>
-	</li>
-
-	<li>
-		{l s='Do not forget to insert your order reference %s.' sprintf=[$reference] d='Modules.Checkpayment.Shop'}
-	</li>
-</ul>
-
-<p>{l s='An email has been sent to you with this information.' d='Modules.Checkpayment.Shop'}</p>
-<p><strong>{l s='Your order will be sent as soon as we receive your payment.' d='Modules.Checkpayment.Shop'}</strong></p>
-
-<p>{l s='For any questions or for further information, please contact our' d='Modules.Checkpayment.Shop'}
-	<a href="{$link->getPageLink('contact', true)|escape:'html'}">{l s='customer service department.' d='Modules.Checkpayment.Shop'}</a>.
-</p>
+{block name='page_content'}
+    <div class="alert alert-success" role="alert">
+        {l s='Your order on %s is complete.' sprintf=[$shop_name] d='Modules.Checkpayment.Shop'}
+    </div>
+{/block}
