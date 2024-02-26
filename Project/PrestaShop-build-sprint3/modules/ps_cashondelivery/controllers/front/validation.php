@@ -18,7 +18,7 @@
  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License version 3.0
  */
 
- require_once 'vendor/autoload.php';
+require_once 'vendor/autoload.php';
 
 use Zxing\QrReader;
 
@@ -53,6 +53,7 @@ class Ps_CashondeliveryValidationModuleFrontController extends ModuleFrontContro
                         null,
                         false,
                         $cart->secure_key
+                        // null
                     );
 
                     $customer = new Customer($cart->id_customer);
@@ -65,22 +66,27 @@ class Ps_CashondeliveryValidationModuleFrontController extends ModuleFrontContro
                         . $cart->id . '&id_module=' . $this->module->id . '&id_order='
                         . $this->module->currentOrder . '&key=' . $customer->secure_key);
 
+                    // Tools::redirect('index.php?controller=order-confirmation&id_cart='
+                    //     . $cart->id . '&id_module=' . $this->module->id . '&id_order='
+                    //     . $this->module->currentOrder . '&key=' . $cart->secure_key);
+
+                    // Tools::redirect('index.php');
                     return;
 
                 } else {
 
                     $this->errors[] = $this->l('Please upload a valid slip.');
                     $this->redirectWithNotifications($this->getCurrentURL());
-                   
+
                 }
             } else {
                 $this->errors[] = $this->l('Please upload a slip.');
                 $this->redirectWithNotifications($this->getCurrentURL());
-        
+
             }
         }
 
-        $this->setTemplate('module:promptpay/views/templates/front/notifications.tpl');        
+        $this->setTemplate('module:promptpay/views/templates/front/notifications.tpl');
         Tools::redirect('index.php?controller=order&step=1');
     }
 

@@ -73,6 +73,10 @@
               {include file='checkout/_partials/cart-detailed-actions.tpl' cart=$cart}
             {/block}
 
+             {block name='cart_actions'}
+              {include file='checkout/_partials/cart-detailed-actions-no-customer.tpl' cart=$cart}
+            {/block}
+
           </div>
         {/block}
 
