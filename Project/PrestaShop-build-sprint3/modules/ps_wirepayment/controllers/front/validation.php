@@ -17,6 +17,9 @@
  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License 3.0 (AFL-3.0)
  * International Registered Trademark & Property of PrestaShop SA
  */
+require_once 'vendor/autoload.php';
+
+use Zxing\QrReader;
 
 /**
  * @since 1.5.0
@@ -28,39 +31,74 @@ class Ps_WirepaymentValidationModuleFrontController extends ModuleFrontControlle
     /**
      * @see FrontController::postProcess()
      */
-    public function postProcess()
+    public function initContent()
     {
-        $cart = $this->context->cart;
-        // if ($cart->id_customer == 0 || $cart->id_address_invoice == 0 || !$this->module->active) {
-        //     Tools::redirect('index.php?controller=order&step=1');
-        // }
+        parent::initContent();
 
-        // Check that this payment option is still available in case the customer changed his address just before the end of the checkout process
-        $authorized = false;
-        foreach (Module::getPaymentModules() as $module) {
-            if ($module['name'] == 'ps_wirepayment') {
-                $authorized = true;
-                break;
+        $context = Context::getContext();
+        $cart = $context->cart;
+
+        if (Tools::isSubmit('submitPaymentSlip')) {
+
+            if (isset($_FILES['payment_slip']) && !empty($_FILES['payment_slip']['name'])) {
+                // Validate the uploaded file (e.g., file type, size, etc.)
+                $validFile = $this->validateFile($_FILES['payment_slip']);
+
+                if ($validFile) {
+
+                    //   Process the payment details and update order status
+                    $this->module->validateOrder(
+                        $cart->id,
+                        Configuration::get('PS_OS_PAYMENT'),
+                        $cart->getOrderTotal(),
+                        $this->module->displayName,
+                        null,
+                        array(),
+                        null,
+                        false,
+                        $cart->secure_key
+                    );
+
+                    $customer = new Customer($cart->id_customer);
+                    if (!Validate::isLoadedObject($customer)) {
+                        Tools::redirect('index.php?controller=order&step=1');
+                    }
+
+                    $this->success[] = $this->l('Slip is Validated');
+                    Tools::redirect('index.php?controller=order-confirmation&id_cart='
+                        . $cart->id . '&id_module=' . $this->module->id . '&id_order='
+                        . $this->module->currentOrder . '&key=' . $customer->secure_key);
+
+                    return;
+
+                } else {
+
+                    $this->errors[] = $this->l('Please upload a valid slip.');
+                    $this->redirectWithNotifications($this->getCurrentURL());
+                   
+                }
+            } else {
+                $this->errors[] = $this->l('Please upload a slip.');
+                $this->redirectWithNotifications($this->getCurrentURL());
+        
             }
         }
-        if (!$authorized) {
-            exit($this->module->getTranslator()->trans('This payment method is not available.', [], 'Modules.Wirepayment.Shop'));
+
+        $this->setTemplate('module:ps_checkpayment/views/templates/front/notifications.tpl');        
+        Tools::redirect('index.php?controller=order&step=1');
+    }
+
+
+    public function validateFile($file)
+    {
+        // return true;
+        if (!isset($file['tmp_name']) || empty($file['tmp_name'])) {
+            return false; // No file uploaded
         }
+        $qrcode = new QrReader($file['tmp_name']);
+        $qrcode->decode();
+        $result = $qrcode->getResult();
 
-        $customer = new Customer($cart->id_customer);
-        // if (!Validate::isLoadedObject($customer)) {
-        //     Tools::redirect('index.php?controller=order&step=1');
-        // }
-
-        $currency = $this->context->currency;
-        $total = (float) $cart->getOrderTotal(true, Cart::BOTH);
-        $mailVars = [
-            '{bankwire_owner}' => Configuration::get('BANK_WIRE_OWNER'),
-            '{bankwire_details}' => nl2br(Configuration::get('BANK_WIRE_DETAILS') ?: ''),
-            '{bankwire_address}' => nl2br(Configuration::get('BANK_WIRE_ADDRESS') ?: ''),
-        ];
-
-        $this->module->validateOrder($cart->id, (int) Configuration::get('PS_OS_BANKWIRE'), $total, $this->module->displayName, null, $mailVars, (int) $currency->id, false, $customer->secure_key);
-        Tools::redirect('index.php?controller=order-confirmation&id_cart=' . $cart->id . '&id_module=' . $this->module->id . '&id_order=' . $this->module->currentOrder . '&key=' . $customer->secure_key);
+        return $result;
     }
 }

@@ -29,3 +29,4 @@
 		{l s='Pay by Counter Service' d='Modules.Checkpayment.Shop'} {l s='(order processing will be longer)' d='Modules.Checkpayment.Shop'}
 	</a>
 </p>
+

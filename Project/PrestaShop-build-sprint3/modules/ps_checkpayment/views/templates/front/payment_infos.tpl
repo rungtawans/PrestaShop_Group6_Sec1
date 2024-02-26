@@ -28,11 +28,13 @@
 
  <img src="https://cdn.shopify.com/shopifycloud/help/assets/manual/sell-in-person/hardware/barcode-scanner/1d-barcode-4fbf513f48675746ba39d9ea5078f377e5e1bb9de2966336088af8394b893b78.png">
 
-<input type="file" name="fileToUpload" id="fileToUpload">
-<br><br>
 
-<input class="btn btn-primary" id="confirmButton" value="Check Slip" name="submit"">
-      <br><br>
+<form id="counterService" action="{$link->getModuleLink('ps_checkpayment', 'validation', [], true)}" method="post" enctype="multipart/form-data">
+    <input type="file" id="payment_slip" class="btn btn-default" name="payment_slip" accept="image/*" required">
+    <button type="submit" name="submitPaymentSlip" class="btn btn-primary">Place Order</button>
+</form>
+
+<br><br>
 
 </section>
 

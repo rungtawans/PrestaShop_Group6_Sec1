@@ -20,10 +20,11 @@
 <section>
   <p>ธนาคารกรุงไทย 64889465</p>
 
-  <input type="file" name="fileToUpload" id="fileToUpload">
+
+<form id="wirepayment" action="{$link->getModuleLink('ps_wirepayment', 'validation', [], true)}" method="post" enctype="multipart/form-data">
+    <input type="file" id="payment_slip" class="btn btn-default" name="payment_slip" accept="image/*" required">
+    <button type="submit" name="submitPaymentSlip" class="btn btn-primary">Place Order</button>
+</form>
+
   <br><br>
 
-  
-<input class="btn btn-primary" id="confirmButton" value="Check Slip" name="submit"">
-      <br><br>
-</section>
