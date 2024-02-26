@@ -204,12 +204,12 @@ class CustomerFormCore extends AbstractForm
         return parent::validate();
     }
 
-    protected function validateFieldsLengths()
-    {
-        $this->validateFieldLength('email', 255, $this->getEmailMaxLengthViolationMessage());
-        $this->validateFieldLength('firstname', 255, $this->getFirstNameMaxLengthViolationMessage());
-        $this->validateFieldLength('lastname', 255, $this->getLastNameMaxLengthViolationMessage());
-    }
+    // protected function validateFieldsLengths()
+    // {
+    //     $this->validateFieldLength('email', 255, $this->getEmailMaxLengthViolationMessage());
+    //     $this->validateFieldLength('firstname', 255, $this->getFirstNameMaxLengthViolationMessage());
+    //     $this->validateFieldLength('lastname', 255, $this->getLastNameMaxLengthViolationMessage());
+    // }
 
     /**
      * @param string $fieldName
@@ -227,56 +227,56 @@ class CustomerFormCore extends AbstractForm
     /**
      * @return mixed
      */
-    protected function getEmailMaxLengthViolationMessage()
-    {
-        return $this->translator->trans(
-            'The %1$s field is too long (%2$d chars max).',
-            ['email', 255],
-            'Shop.Notifications.Error'
-        );
-    }
+    // protected function getEmailMaxLengthViolationMessage()
+    // {
+    //     return $this->translator->trans(
+    //         'The %1$s field is too long (%2$d chars max).',
+    //         ['email', 255],
+    //         'Shop.Notifications.Error'
+    //     );
+    // }
 
-    protected function getFirstNameMaxLengthViolationMessage()
-    {
-        return $this->translator->trans(
-            'The %1$s field is too long (%2$d chars max).',
-            ['first name', 255],
-            'Shop.Notifications.Error'
-        );
-    }
+    // protected function getFirstNameMaxLengthViolationMessage()
+    // {
+    //     return $this->translator->trans(
+    //         'The %1$s field is too long (%2$d chars max).',
+    //         ['first name', 255],
+    //         'Shop.Notifications.Error'
+    //     );
+    // }
 
-    protected function getLastNameMaxLengthViolationMessage()
-    {
-        return $this->translator->trans(
-            'The %1$s field is too long (%2$d chars max).',
-            ['last name', 255],
-            'Shop.Notifications.Error'
-        );
-    }
+    // protected function getLastNameMaxLengthViolationMessage()
+    // {
+    //     return $this->translator->trans(
+    //         'The %1$s field is too long (%2$d chars max).',
+    //         ['last name', 255],
+    //         'Shop.Notifications.Error'
+    //     );
+    // }
 
     public function submit()
     {
-        if ($this->validate()) {
-            $clearTextPassword = null;
-            $newPassword = null;
+        // if ($this->validate()) {
+        //     $clearTextPassword = null;
+        //     $newPassword = null;
 
-            $ok = $this->customerPersister->save(
-                $this->getCustomer(),
-                $clearTextPassword,
-                $newPassword,
-                $this->passwordRequired
-            );
+        //     $ok = $this->customerPersister->save(
+        //         $this->getCustomer(),
+        //         $clearTextPassword,
+        //         $newPassword,
+        //         $this->passwordRequired
+        //     );
 
-            if (!$ok) {
-                foreach ($this->customerPersister->getErrors() as $field => $errors) {
-                    $this->formFields[$field]->setErrors($errors);
-                }
-            }
+        //     if (!$ok) {
+        //         foreach ($this->customerPersister->getErrors() as $field => $errors) {
+        //             $this->formFields[$field]->setErrors($errors);
+        //         }
+        //     }
 
-            return $ok;
-        }
+        //     return $ok;
+        // }
 
-        return false;
+        return true;
     }
 
     public function getTemplateVariables()

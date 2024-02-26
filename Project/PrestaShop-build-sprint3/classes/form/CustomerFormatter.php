@@ -104,53 +104,53 @@ class CustomerFormatterCore implements FormFormatterInterface
             ->setRequired(true)
             ->setAvailableValues(['yes' => 'yes', 'no' => 'no']);
 
-        $genders = Gender::getGenders($this->language->id);
-        if ($genders->count() > 0) {
-            $genderField = (new FormField())
-                ->setName('id_gender')
-                ->setType('radio-buttons')
-                ->setLabel(
-                    $this->translator->trans(
-                        'Social title',
-                        [],
-                        'Shop.Forms.Labels'
-                    )
-                );
-            foreach ($genders as $gender) {
-                $genderField->addAvailableValue($gender->id, $gender->name);
-            }
-            $format[$genderField->getName()] = $genderField;
-        }
+        // $genders = Gender::getGenders($this->language->id);
+        // if ($genders->count() > 0) {
+        //     $genderField = (new FormField())
+        //         ->setName('id_gender')
+        //         ->setType('radio-buttons')
+        //         ->setLabel(
+        //             $this->translator->trans(
+        //                 'Social title',
+        //                 [],
+        //                 'Shop.Forms.Labels'
+        //             )
+        //         );
+        //     foreach ($genders as $gender) {
+        //         $genderField->addAvailableValue($gender->id, $gender->name);
+        //     }
+        //     $format[$genderField->getName()] = $genderField;
+        // }
 
-        $format['firstname'] = (new FormField())
-            ->setName('firstname')
-            ->setLabel(
-                $this->translator->trans(
-                    'First name',
-                    [],
-                    'Shop.Forms.Labels'
-                )
-            )
-            ->setRequired(true)
-            ->addAvailableValue(
-                'comment',
-                $this->translator->trans('Only letters and the dot (.) character, followed by a space, are allowed.', [], 'Shop.Forms.Help')
-            );
+        // $format['firstname'] = (new FormField())
+        //     ->setName('firstname')
+        //     ->setLabel(
+        //         $this->translator->trans(
+        //             'First name',
+        //             [],
+        //             'Shop.Forms.Labels'
+        //         )
+        //     )
+        //     ->setRequired(false)
+        //     ->addAvailableValue(
+        //         'comment',
+        //         $this->translator->trans('Only letters and the dot (.) character, followed by a space, are allowed.', [], 'Shop.Forms.Help')
+        //     );
 
-        $format['lastname'] = (new FormField())
-            ->setName('lastname')
-            ->setLabel(
-                $this->translator->trans(
-                    'Last name',
-                    [],
-                    'Shop.Forms.Labels'
-                )
-            )
-            ->setRequired(true)
-            ->addAvailableValue(
-                'comment',
-                $this->translator->trans('Only letters and the dot (.) character, followed by a space, are allowed.', [], 'Shop.Forms.Help')
-            );
+        // $format['lastname'] = (new FormField())
+        //     ->setName('lastname')
+        //     ->setLabel(
+        //         $this->translator->trans(
+        //             'Last name',
+        //             [],
+        //             'Shop.Forms.Labels'
+        //         )
+        //     )
+        //     ->setRequired(false)
+        //     ->addAvailableValue(
+        //         'comment',
+        //         $this->translator->trans('Only letters and the dot (.) character, followed by a space, are allowed.', [], 'Shop.Forms.Help')
+        //     );
 
         if (Configuration::get('PS_B2B_ENABLE')) {
             $format['company'] = (new FormField())
@@ -172,17 +172,17 @@ class CustomerFormatterCore implements FormFormatterInterface
                 ));
         }
 
-        $format['email'] = (new FormField())
-            ->setName('email')
-            ->setType('email')
-            ->setLabel(
-                $this->translator->trans(
-                    'Email',
-                    [],
-                    'Shop.Forms.Labels'
-                )
-            )
-            ->setRequired(true);
+        // $format['email'] = (new FormField())
+        //     ->setName('email')
+        //     ->setType('email')
+        //     ->setLabel(
+        //         $this->translator->trans(
+        //             'Email',
+        //             [],
+        //             'Shop.Forms.Labels'
+        //         )
+        //     )
+        //     ->setRequired(false);
 
         // if ($this->ask_for_password) {
         //     $format['password'] = (new FormField())
@@ -279,4 +279,5 @@ class CustomerFormatterCore implements FormFormatterInterface
 
         return $format;
     }
+
 }
