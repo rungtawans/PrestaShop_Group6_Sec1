@@ -80,9 +80,9 @@ class Ps_Cashondelivery extends PaymentModule
         /** @var Cart $cart */
         $cart = $params['cart'];
 
-        if ($cart->isVirtualCart()) {
-            return [];
-        }
+        // if ($cart->isVirtualCart()) {
+        //     return [];
+        // }
 
         $cashOnDeliveryOption = new PaymentOption();
         $cashOnDeliveryOption->setModuleName($this->name);
