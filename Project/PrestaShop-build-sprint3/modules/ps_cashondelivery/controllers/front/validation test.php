@@ -35,58 +35,60 @@ class Ps_CashondeliveryValidationModuleFrontController extends ModuleFrontContro
         // $cart = $context->cart;
 
         if (Tools::isSubmit('submitPaymentSlip')) {
-
             if (isset($_FILES['payment_slip']) && !empty($_FILES['payment_slip']['name'])) {
                 // Validate the uploaded file (e.g., file type, size, etc.)
                 $validFile = $this->validateFile($_FILES['payment_slip']);
-
+        
                 if ($validFile) {
+                    // Validate the cart
                     $cart = $this->context->cart;
-                    
-                    $customer = new Customer($cart->id_customer);
-                    if (!Validate::isLoadedObject($customer)) {
-                        Tools::redirect('index.php?controller=order&step=1');
-
-                    } else {
-
-                        //   Process the payment details and update order status
-                        $this->module->validateOrder(
-                            $cart->id,
-                            Configuration::get('PS_OS_PAYMENT'),
-                            $cart->getOrderTotal(),
-                            $this->module->displayName,
-                            null,
-                            array(),
-                            null,
-                            false,
-                            $cart->secure_key
-                        );
-
-                        $this->success[] = $this->l('Slip is Validated');
-                        Tools::redirect('index.php?controller=order-confirmation&id_cart='
-                            . $cart->id . '&id_module=' . $this->module->id . '&id_order='
-                            . $this->module->currentOrder . '&key=' . $customer->secure_key);
-
+                    if (!Validate::isLoadedObject($cart)) {
+                        $this->errors[] = $this->l('Invalid cart');
+                        $this->redirectWithNotifications($this->getCurrentURL());
                         return;
                     }
-
+        
+                    // Validate the order
+                    $result = $this->module->validateOrder(
+                        $cart->id,
+                        Configuration::get('PS_OS_PAYMENT'),
+                        $cart->getOrderTotal(),
+                        $this->module->displayName,
+                        null,
+                        array(),
+                        null,
+                        false,
+                        null, 
+                        $cart->order_reference
+                    );
+        
+                    if ($result) {
+                        $this->success[] = $this->l('Order Success');
+                        Tools::redirect('index.php?controller=order-confirmation&id_cart=' . $cart->id . '&id_module=' . $this->module->id . '&id_order=' . $this->module->currentOrder . '&key=' . $cart->secure_key);
+                        return;
+                    } else {
+                        $this->errors[] = $this->l('Failed to validate order');
+                        $this->redirectWithNotifications($this->getCurrentURL());
+                        return;
+                    }
                 } else {
-
                     $this->errors[] = $this->l('Please upload a valid slip.');
                     $this->redirectWithNotifications($this->getCurrentURL());
-
+                    return;
                 }
             } else {
                 $this->errors[] = $this->l('Please upload a slip.');
                 $this->redirectWithNotifications($this->getCurrentURL());
-
+                return;
             }
         }
-
+        
         $this->setTemplate('module:promptpay/views/templates/front/notifications.tpl');
         Tools::redirect('index.php?controller=order&step=1');
+        
     }
-    
+
+
     public function validateFile($file)
     {
         // return true;

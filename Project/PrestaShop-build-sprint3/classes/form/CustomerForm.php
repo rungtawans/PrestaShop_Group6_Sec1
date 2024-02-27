@@ -92,15 +92,29 @@ class CustomerFormCore extends AbstractForm
             // In some cases, browsers convert non ASCII chars (from input type="email") to "punycode",
             // we need to convert it back
             $params['email'] = $this->IDNConverter->emailToUtf8($params['email']);
+        
         }
+        if (empty($params['firstname']) && empty($params['lastname'] && empty($params['email']))) {
+            $params['firstname'] = $customer->firstname === 'test';
+            $params['lastname'] = $customer->lastname === 'test';
+            $params['email'] = $customer->email === 'default@email.com';
+        }
+    
 
         return parent::fillWith($params);
     }
 
     public function fillFromCustomer(Customer $customer)
     {
+
         $params = get_object_vars($customer);
         $params['birthday'] = $customer->birthday === '0000-00-00' ? null : Tools::displayDate($customer->birthday);
+
+        if (empty($params['firstname']) && empty($params['lastname'] && empty($params['email']))) {
+            $params['firstname'] = $customer->firstname === 'test';
+            $params['lastname'] = $customer->lastname === 'test';
+            $params['email'] = $customer->email === 'default@email.com';
+        }
 
         return $this->fillWith($params);
     }
@@ -124,20 +138,25 @@ class CustomerFormCore extends AbstractForm
 
     public function validate()
     {
+        
         $emailField = $this->getField('email');
+
         $id_customer = Customer::customerExists($emailField->getValue(), true, true);
         $customer = $this->getCustomer();
         if ($id_customer && $id_customer != $customer->id) {
-            $emailField->addError($this->translator->trans(
-                'The email is already used, please choose another one or sign in',
-                [],
-                'Shop.Notifications.Error'
-            ));
+            $emailField->addError(
+                $this->translator->trans(
+                    'The email is already used, please choose another one or sign in',
+                    [],
+                    'Shop.Notifications.Error'
+                )
+            );
         }
 
         // check birthdayField against null case is mandatory.
         $birthdayField = $this->getField('birthday');
-        if (!empty($birthdayField) &&
+        if (
+            !empty($birthdayField) &&
             !empty($birthdayField->getValue()) &&
             Validate::isBirthDate($birthdayField->getValue(), $this->context->language->date_format_lite)
         ) {
@@ -148,56 +167,6 @@ class CustomerFormCore extends AbstractForm
             $birthdayField->setValue($dateBuilt->format('Y-m-d'));
         }
 
-        // if ($this->getField('new_password') === null
-        //     || !empty($this->getField('new_password')->getValue())
-        // ) {
-        //     $passwordField = $this->getField('new_password') ?? $this->getField('password');
-        //     if (!empty($passwordField->getValue()) || $this->passwordRequired) {
-        //         if (Validate::isAcceptablePasswordLength($passwordField->getValue()) === false) {
-        //             $passwordField->addError($this->translator->trans(
-        //                 'Password must be between %d and %d characters long',
-        //                 [
-        //                     Configuration::get(PasswordPolicyConfiguration::CONFIGURATION_MINIMUM_LENGTH),
-        //                     Configuration::get(PasswordPolicyConfiguration::CONFIGURATION_MAXIMUM_LENGTH),
-        //                 ],
-        //                 'Shop.Notifications.Error'
-        //             ));
-        //         }
-
-        //         if (Validate::isAcceptablePasswordScore($passwordField->getValue()) === false) {
-        //             $wordingsForScore = [
-        //                 $this->translator->trans('Very weak', [], 'Shop.Theme.Global'),
-        //                 $this->translator->trans('Weak', [], 'Shop.Theme.Global'),
-        //                 $this->translator->trans('Average', [], 'Shop.Theme.Global'),
-        //                 $this->translator->trans('Strong', [], 'Shop.Theme.Global'),
-        //                 $this->translator->trans('Very strong', [], 'Shop.Theme.Global'),
-        //             ];
-        //             $globalErrorMessage = $this->translator->trans(
-        //                 'The minimum score must be: %s',
-        //                 [
-        //                     $wordingsForScore[(int) Configuration::get(PasswordPolicyConfiguration::CONFIGURATION_MINIMUM_SCORE)],
-        //                 ],
-        //                 'Shop.Notifications.Error'
-        //             );
-        //             if ($this->context->shop->theme->get('global_settings.new_password_policy_feature') !== true) {
-        //                 $zxcvbn = new Zxcvbn();
-        //                 $result = $zxcvbn->passwordStrength($passwordField->getValue());
-        //                 if (!empty($result['feedback']['warning'])) {
-        //                     $passwordField->addError($this->translator->trans(
-        //                         $result['feedback']['warning'], [], 'Shop.Theme.Global'
-        //                     ));
-        //                 } else {
-        //                     $passwordField->addError($globalErrorMessage);
-        //                 }
-        //                 foreach ($result['feedback']['suggestions'] as $suggestion) {
-        //                     $passwordField->addError($this->translator->trans($suggestion, [], 'Shop.Theme.Global'));
-        //                 }
-        //             } else {
-        //                 $passwordField->addError($globalErrorMessage);
-        //             }
-        //         }
-        //     }
-        // }
         // $this->validateFieldsLengths();
         // $this->validateByModules();
 
@@ -256,27 +225,59 @@ class CustomerFormCore extends AbstractForm
 
     public function submit()
     {
-        if ($this->validate()) {
-            $clearTextPassword = null;
-            $newPassword = null;
 
-            $ok = $this->customerPersister->save(
-                $this->getCustomer(),
-                $clearTextPassword,
-                $newPassword,
-                $this->passwordRequired
-            );
+        // $emailField = $this->getField('email');
+        // $firstnameField = $this->getField('firstname');
+        // $lastnameField = $this->getField('lastname');
 
-            if (!$ok) {
-                foreach ($this->customerPersister->getErrors() as $field => $errors) {
-                    $this->formFields[$field]->setErrors($errors);
+        // if (
+        //     !empty($emailField) && !empty($emailField->getValue()) &&
+        //     !empty($firstnameField) && !empty($firstnameField->getValue()) &&
+        //     !empty($lastnameField) && !empty($lastnameField->getValue())
+        // ) {
+
+            if ($this->validate()) {
+                $clearTextPassword = null;
+                $newPassword = null;
+
+                $ok = $this->customerPersister->save(
+                    $this->getCustomer(),
+                    $clearTextPassword,
+                    $newPassword,
+                    $this->passwordRequired
+                );
+
+                if (!$ok) {
+                    foreach ($this->customerPersister->getErrors() as $field => $errors) {
+                        $this->formFields[$field]->setErrors($errors);
+                    }
                 }
-            }
+            // }
+        // } else {
+        //     // Some required fields are missing, display an error message or set default values
+        //     // For example, you can set default values for the missing fields
+        //     if (empty($emailField) || empty($emailField->getValue())) {
+        //         $emailField->setValue("default@example.com");
+        //     }
+        //     if (empty($firstnameField) || empty($firstnameField->getValue())) {
+        //         $firstnameField->setValue("John");
+        //     }
+        //     if (empty($lastnameField) || empty($lastnameField->getValue())) {
+        //         $lastnameField->setValue("Doe");
+        //     }
 
-            return $ok;
+        //     $clearTextPassword = null;
+        //     $newPassword = null;
+
+        //     $ok = $this->customerPersister->save(
+        //         $this->getCustomer(),
+        //         $clearTextPassword,
+        //         $newPassword,
+        //         $this->passwordRequired
+        //     );
+
         }
-
-        return false;
+        return true;
     }
 
     public function getTemplateVariables()

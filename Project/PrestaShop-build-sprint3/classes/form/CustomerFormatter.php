@@ -122,7 +122,8 @@ class CustomerFormatterCore implements FormFormatterInterface
         //     $format[$genderField->getName()] = $genderField;
         // }
 
-        $format['firstname'] = (new FormField())
+        $format['firstname']
+         = (new FormField())
             ->setName('firstname')
             ->setLabel(
                 $this->translator->trans(
@@ -131,14 +132,15 @@ class CustomerFormatterCore implements FormFormatterInterface
                     'Shop.Forms.Labels'
                 )
             )
-            ->setRequired(true)
+            ->setRequired(false)
             ->addAvailableValue(
                 'comment',
                 $this->translator->trans('Only letters and the dot (.) character, followed by a space, are allowed.', [], 'Shop.Forms.Help')
             )
             ;
 
-        $format['lastname'] = (new FormField())
+        $format['lastname'] 
+        = (new FormField())
             ->setName('lastname')
             ->setLabel(
                 $this->translator->trans(
@@ -147,7 +149,7 @@ class CustomerFormatterCore implements FormFormatterInterface
                     'Shop.Forms.Labels'
                 )
             )
-            ->setRequired(true)
+            ->setRequired(false)
             ->addAvailableValue(
                 'comment',
                 $this->translator->trans('Only letters and the dot (.) character, followed by a space, are allowed.', [], 'Shop.Forms.Help')
@@ -174,16 +176,18 @@ class CustomerFormatterCore implements FormFormatterInterface
                 ));
         }
 
-        $format['email'] = (new FormField())
+        $format['email']
+         = (new FormField())
             ->setName('email')
             ->setType('email')
+            
             ->setLabel(
                 $this->translator->trans(
                     'Email',
                     [],
                     'Shop.Forms.Labels'
                 )
-            )->setRequired(true)
+            )->setRequired(false)
             ;
 
         // if ($this->ask_for_password) {
