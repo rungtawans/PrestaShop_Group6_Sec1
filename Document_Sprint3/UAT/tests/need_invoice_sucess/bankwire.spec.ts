@@ -1,0 +1,34 @@
+import { test, expect } from '@playwright/test';
+
+test('test', async ({ page }) => {
+  await page.goto('http://localhost:8080/en/');
+  await page.locator('.thumbnail').first().click();
+  await page.getByRole('button', { name: ' Add to cart' }).click();
+  await page.getByRole('link', { name: ' Proceed to checkout' }).click();
+  await page.getByRole('link', { name: 'Proceed to checkout' }).click();
+  await page.getByLabel('yes').check();
+  await page.getByRole('button',{name : 'Continue'}).click();
+  await page.locator('#delivery-address #field-firstname').click();
+  await page.locator('#delivery-address #field-firstname').fill('Somsri');
+  await page.locator('#delivery-address #field-firstname').press('Tab');
+  await page.locator('#delivery-address #field-lastname').fill('sodsai');
+  await page.getByLabel('VAT number').click();
+  await page.getByLabel('VAT number').fill('0000-0-0000-0-001');
+  await page.getByLabel('Address', { exact: true }).click();
+  await page.getByLabel('Address', { exact: true }).fill('29/1');
+  await page.getByLabel('Zip/Postal Code').click();
+  await page.getByLabel('Zip/Postal Code').fill('40000');
+  await page.getByLabel('City').click();
+  await page.getByLabel('City').fill('Khon kaen');
+  await page.getByLabel('Phone').click();
+  await page.getByLabel('Phone').fill('095-877-5441');
+  await page.getByRole('button', { name: 'Continue' }).click();
+  await page.getByText('Choose Pay by bank wire').click();
+  await page.getByText('Pay by bank wire').click();
+  await page.getByRole('textbox').click();
+  await page.getByRole('textbox').setInputFiles('tests/qrcode.jpg');
+  await page.goto('http://localhost:8080/en/order-confirmation?id_cart=129&id_module=49&id_order=72&key=1799552e9ec12342a51765592bf144e9');
+  const downloadPromise = page.waitForEvent('download');
+  await page.getByRole('link', { name: 'download your invoice' }).click();
+  const download = await downloadPromise;
+});
