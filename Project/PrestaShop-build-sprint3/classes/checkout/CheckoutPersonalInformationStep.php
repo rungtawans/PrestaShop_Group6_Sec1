@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright since 2007 PrestaShop SA and Contributors
  * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
@@ -23,6 +24,7 @@
  * @copyright Since 2007 PrestaShop SA and Contributors
  * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
+
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class CheckoutPersonalInformationStepCore extends AbstractCheckoutStep
@@ -60,13 +62,19 @@ class CheckoutPersonalInformationStepCore extends AbstractCheckoutStep
         // personal info step is always reachable
         $this->setReachable(true);
 
+
+        // $customer = $this->getCheckoutProcess()->getCheckoutSession()->getCustomer();
+        // $customer->setFirstName(''); // Set the first name to 'John', replace with desired first name
+        // $customer->setLastName('');
+        // $this->registerForm->fillFromCustomer($customer);
+        
         $this->registerForm
             ->fillFromCustomer(
-                $this
-                    ->getCheckoutProcess()
-                    ->getCheckoutSession()
-                    ->getCustomer()
+                $this->getCheckoutProcess()
+                ->getCheckoutSession()
+                ->getCustomer()
             );
+
 
         if (isset($requestParameters['submitCreate'])) {
             $this->registerForm->fillWith($requestParameters);
@@ -78,14 +86,12 @@ class CheckoutPersonalInformationStepCore extends AbstractCheckoutStep
                 //TO DO ; edit skip 2 times
                 $this->setNextStepAsCurrent();
                 $this->setComplete(true);
-
             } else {
                 $this->setComplete(false);
                 $this->setCurrent(true);
                 //error not go to next step
                 $this->getCheckoutProcess()->setHasErrors(true)->setNextStepReachable();
             }
-
         } elseif (isset($requestParameters['submitLogin'])) {
             $this->loginForm->fillWith($requestParameters);
             if ($this->loginForm->submit()) {

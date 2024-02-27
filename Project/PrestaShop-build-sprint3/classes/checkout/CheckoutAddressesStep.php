@@ -66,9 +66,15 @@ class CheckoutAddressesStepCore extends AbstractCheckoutStep
     }
 
     public function handleRequest(array $requestParams = [])
-    {
+    {{
         $this->addressForm->setAction($this->getCheckoutSession()->getCheckoutURL());
 
+
+        if ($this->getCheckoutSession()->getCustomer()->firstname==='') {
+            $this->setComplete(true);
+            $this->setNextStepAsCurrent();
+            
+        }
         if (array_key_exists('use_same_address', $requestParams)) {
             $this->use_same_address = (bool) $requestParams['use_same_address'];
             if (!$this->use_same_address) {
@@ -229,7 +235,7 @@ class CheckoutAddressesStepCore extends AbstractCheckoutStep
         $this->setTitle($this->getTranslator()->trans('Personal Information and Address', [], 'Shop.Theme.Checkout'));
 
         return $this;
-    }
+    }}
 
     public function getTemplateParameters()
     {

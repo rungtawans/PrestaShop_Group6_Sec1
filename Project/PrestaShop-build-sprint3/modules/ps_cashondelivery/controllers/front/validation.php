@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright since 2007 PrestaShop SA and Contributors
  * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
@@ -18,7 +19,7 @@
  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License version 3.0
  */
 
- require_once 'vendor/autoload.php';
+require_once 'vendor/autoload.php';
 
 use Zxing\QrReader;
 
@@ -43,6 +44,17 @@ class Ps_CashondeliveryValidationModuleFrontController extends ModuleFrontContro
                 if ($validFile) {
 
                     //   Process the payment details and update order status
+                    // $id_cart,
+                    // $id_order_state,
+                    // $amount_paid,
+                    // $payment_method = 'Unknown',
+                    // $message = null,
+                    // $extra_vars = [],
+                    // $currency_special = null,
+                    // $dont_touch_amount = false,
+                    // $secure_key = false,
+                    // Shop $shop = null,
+                    // ?string $order_reference = null
                     $this->module->validateOrder(
                         $cart->id,
                         Configuration::get('PS_OS_PAYMENT'),
@@ -65,22 +77,20 @@ class Ps_CashondeliveryValidationModuleFrontController extends ModuleFrontContro
                         . $cart->id . '&id_module=' . $this->module->id . '&id_order='
                         . $this->module->currentOrder . '&key=' . $customer->secure_key);
 
+                
                     return;
-
                 } else {
 
                     $this->errors[] = $this->l('Please upload a valid slip.');
                     $this->redirectWithNotifications($this->getCurrentURL());
-                   
                 }
             } else {
                 $this->errors[] = $this->l('Please upload a slip.');
                 $this->redirectWithNotifications($this->getCurrentURL());
-        
             }
         }
 
-        $this->setTemplate('module:promptpay/views/templates/front/notifications.tpl');        
+        $this->setTemplate('module:promptpay/views/templates/front/notifications.tpl');
         Tools::redirect('index.php?controller=order&step=1');
     }
 

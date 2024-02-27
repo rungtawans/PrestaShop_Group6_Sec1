@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright since 2007 PrestaShop SA and Contributors
  * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
@@ -23,6 +24,7 @@
  * @copyright Since 2007 PrestaShop SA and Contributors
  * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
+
 use PrestaShop\PrestaShop\Core\Security\PasswordPolicyConfiguration;
 use PrestaShop\PrestaShop\Core\Util\InternationalizedDomainNameConverter;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -93,6 +95,11 @@ class CustomerFormCore extends AbstractForm
             // we need to convert it back
             $params['email'] = $this->IDNConverter->emailToUtf8($params['email']);
         }
+        if (empty($params['firstname'])) {
+            $params['firstname'] = $customer->firstname === '';
+            $params['lastname'] = $customer->lastname === '';
+            $params['email'] = $customer->email === '';
+        }
 
         return parent::fillWith($params);
     }
@@ -101,6 +108,10 @@ class CustomerFormCore extends AbstractForm
     {
         $params = get_object_vars($customer);
         $params['birthday'] = $customer->birthday === '0000-00-00' ? null : Tools::displayDate($customer->birthday);
+
+        $params['firstname'] = $customer->firstname === '' ? null : $customer->firstname;
+        $params['lastname'] = $customer->lastname === '' ? null : $customer->lastname;
+        $params['email'] = $customer->email === '' ? null : $customer->email;
 
         return $this->fillWith($params);
     }
@@ -137,7 +148,8 @@ class CustomerFormCore extends AbstractForm
 
         // check birthdayField against null case is mandatory.
         $birthdayField = $this->getField('birthday');
-        if (!empty($birthdayField) &&
+        if (
+            !empty($birthdayField) &&
             !empty($birthdayField->getValue()) &&
             Validate::isBirthDate($birthdayField->getValue(), $this->context->language->date_format_lite)
         ) {
@@ -257,15 +269,17 @@ class CustomerFormCore extends AbstractForm
     public function submit()
     {
         // if ($this->validate()) {
-        //     $clearTextPassword = null;
-        //     $newPassword = null;
+            $clearTextPassword = null;
+            $newPassword = null;
 
-        //     $ok = $this->customerPersister->save(
-        //         $this->getCustomer(),
-        //         $clearTextPassword,
-        //         $newPassword,
-        //         $this->passwordRequired
-        //     );
+            if ($this->getCustomer())
+
+            $ok = $this->customerPersister->save(
+                $this->getCustomer(),
+                $clearTextPassword,
+                $newPassword,
+                $this->passwordRequired
+            );
 
         //     if (!$ok) {
         //         foreach ($this->customerPersister->getErrors() as $field => $errors) {
@@ -276,7 +290,7 @@ class CustomerFormCore extends AbstractForm
         //     return $ok;
         // }
 
-        return true;
+        return $ok;
     }
 
     public function getTemplateVariables()
