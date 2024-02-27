@@ -36,7 +36,7 @@ class Ps_WirepaymentValidationModuleFrontController extends ModuleFrontControlle
         parent::initContent();
 
         $context = Context::getContext();
-        $cart = $context->cart;
+        // $cart = $context->cart;
 
         if (Tools::isSubmit('submitPaymentSlip')) {
 
@@ -45,46 +45,49 @@ class Ps_WirepaymentValidationModuleFrontController extends ModuleFrontControlle
                 $validFile = $this->validateFile($_FILES['payment_slip']);
 
                 if ($validFile) {
-
-                    //   Process the payment details and update order status
-                    $this->module->validateOrder(
-                        $cart->id,
-                        Configuration::get('PS_OS_PAYMENT'),
-                        $cart->getOrderTotal(),
-                        $this->module->displayName,
-                        null,
-                        array(),
-                        null,
-                        false,
-                        $cart->secure_key
-                    );
-
+                    $cart = $this->context->cart;
+                    
                     $customer = new Customer($cart->id_customer);
                     if (!Validate::isLoadedObject($customer)) {
                         Tools::redirect('index.php?controller=order&step=1');
+
+                    } else {
+
+                        //   Process the payment details and update order status
+                        $this->module->validateOrder(
+                            $cart->id,
+                            Configuration::get('PS_OS_PAYMENT'),
+                            $cart->getOrderTotal(),
+                            $this->module->displayName,
+                            null,
+                            array(),
+                            null,
+                            false,
+                            $cart->secure_key
+                        );
+
+                        $this->success[] = $this->l('Slip is Validated');
+                        Tools::redirect('index.php?controller=order-confirmation&id_cart='
+                            . $cart->id . '&id_module=' . $this->module->id . '&id_order='
+                            . $this->module->currentOrder . '&key=' . $customer->secure_key);
+
+                        return;
                     }
-
-                    $this->success[] = $this->l('Slip is Validated');
-                    Tools::redirect('index.php?controller=order-confirmation&id_cart='
-                        . $cart->id . '&id_module=' . $this->module->id . '&id_order='
-                        . $this->module->currentOrder . '&key=' . $customer->secure_key);
-
-                    return;
 
                 } else {
 
                     $this->errors[] = $this->l('Please upload a valid slip.');
                     $this->redirectWithNotifications($this->getCurrentURL());
-                   
+
                 }
             } else {
                 $this->errors[] = $this->l('Please upload a slip.');
                 $this->redirectWithNotifications($this->getCurrentURL());
-        
+
             }
         }
 
-        $this->setTemplate('module:ps_checkpayment/views/templates/front/notifications.tpl');        
+        $this->setTemplate('module:promptpay/views/templates/front/notifications.tpl');
         Tools::redirect('index.php?controller=order&step=1');
     }
 
