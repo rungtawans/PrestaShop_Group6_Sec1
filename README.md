@@ -1,6 +1,6 @@
-# Adap Blueprint Sprint 2
+# Adapt Blueprint Sprint 2, 3
 - https://miro.com/app/board/uXjVNuN3vrk=/
-- 
+
 # PrestaShop_Group6_Sec1
 - Member
 1. นางสาวรุ่งทิวา แต้อุดมโชค    รหัสนักศึกษา 643021248-7   Github : cucumberK
